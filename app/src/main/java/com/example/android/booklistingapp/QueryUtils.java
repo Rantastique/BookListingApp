@@ -124,33 +124,31 @@ public final class QueryUtils {
         //try parsing the JSONrespose String
         try {
             JSONObject baseJsonResponse = new JSONObject(bookJSON);
+            if (baseJsonResponse.has("items")){
+                JSONArray bookArray = baseJsonResponse.getJSONArray("items");
+                for (int i = 0; i < bookArray.length(); i++) {
 
-            JSONArray bookArray = baseJsonResponse.getJSONArray("items");
+                    JSONObject currentBook = bookArray.getJSONObject(i);
 
-            for (int i = 0; i < bookArray.length(); i++) {
+                    JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
-                JSONObject currentBook = bookArray.getJSONObject(i);
+                    String title = volumeInfo.getString("title");
 
-                JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
+                    String author;
+                    if (volumeInfo.has("authors")) {
+                        author = volumeInfo.getJSONArray("authors").get(0).toString();
+                    }
+                    else {
+                        author = "Unknown author";
+                    }
 
-                String title = volumeInfo.getString("title");
+                    String url = volumeInfo.getString("infoLink");
 
-                String author;
-                if (volumeInfo.has("authors")) {
-                    author = volumeInfo.getJSONArray("authors").get(0).toString();
+                    Book book = new Book(title, author, url);
+
+                    books.add(book);
                 }
-                else {
-                    author = "Unknown author";
-                }
-
-                String url = volumeInfo.getString("infoLink");
-
-                Book book = new Book(title, author, url);
-
-                books.add(book);
             }
-
-
         } catch (JSONException e) {
             Log.e("QueryUtils", "Problem parsing the JSON results", e);
         }

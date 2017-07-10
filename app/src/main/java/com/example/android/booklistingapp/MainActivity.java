@@ -57,16 +57,6 @@ public class MainActivity extends AppCompatActivity
         //set loading spinner to GONE since it's only used after the user has started the query
         mLoadingSpinner.setVisibility(View.GONE);
 
-        //get reference to ConnectivityManager and check state of network connectivity
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        //get details on the currently active default data network
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-        //create and initialise a boolean variable for connectivity status
-        final boolean isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting();
-
         //set an OnQueryTextListener on the SearchButton
         mSearchTitle.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -77,6 +67,16 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                //get reference to ConnectivityManager and check state of network connectivity
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                //get details on the currently active default data network
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+                //create and initialise a boolean variable for connectivity status
+                final boolean isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting();
+
                 //if device is connected
                 if (isConnected) {
                     //set visbility of loading spinner to visible
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 //if device is not connected
                 else {
+                    mAdapter.clear();
                     mEmptyStateTextView.setText(R.string.no_network);
                     mLoadingSpinner.setVisibility(View.GONE);
                     return false;
