@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">BookListingApp</string>
+    <string name="no_network">Can\'t get internet connection</string>
+    <string name="no_books">No books with this title available</string>
+    <string name="query_hint">Click on the magnifier icon to search for a book title</string>
+</resources>
